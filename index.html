@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARSIP SITUS — Tipe, Gaya Desain &amp; Kamus Komponen Website</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#111111;
+    --paper:#FFFFFF;
+    --yellow:#FFD400;
+    --blue:#2B4DFF;
+    --red:#FF2E17;
+    --gray:#9A9A92;
+    --border:4px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'Space Mono',monospace;line-height:1.5;-webkit-font-smoothing:antialiased;}
+  ::selection{background:var(--yellow);color:var(--ink);}
+  a{color:inherit;}
+  h1,h2,h3{font-family:'Archivo Black',sans-serif;text-transform:uppercase;line-height:1.02;letter-spacing:-0.01em;}
+
+  .grain{position:fixed;inset:0;pointer-events:none;z-index:999;background-image:repeating-linear-gradient(0deg, rgba(0,0,0,.025) 0px, rgba(0,0,0,.025) 1px, transparent 1px, transparent 3px);mix-blend-mode:multiply;opacity:.4;}
+
+  /* ===== nav ===== */
+  header.nav{position:sticky;top:0;z-index:100;background:var(--paper);border-bottom:var(--border) solid var(--ink);display:flex;align-items:center;justify-content:space-between;padding:14px 28px;gap:16px;flex-wrap:wrap;}
+  .stamp{display:flex;align-items:center;gap:10px;font-family:'Archivo Black',sans-serif;font-size:15px;letter-spacing:.02em;flex-shrink:0;}
+  .stamp .box{border:3px solid var(--ink);padding:3px 7px;font-size:11px;transform:rotate(-4deg);background:var(--yellow);}
+  nav.links{display:flex;gap:0;border:3px solid var(--ink);flex-shrink:0;}
+  nav.links a{padding:8px 13px;font-size:11.5px;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:.06em;border-left:3px solid var(--ink);white-space:nowrap;}
+  nav.links a:first-child{border-left:none;}
+  nav.links a:hover{background:var(--ink);color:var(--paper);}
+  @media(max-width:1000px){nav.links{display:none;}}
+
+  .search-wrap{flex:1;min-width:180px;max-width:320px;position:relative;}
+  .search-wrap input{width:100%;border:3px solid var(--ink);padding:9px 12px 9px 34px;font-family:'Space Mono',monospace;font-size:12px;background:var(--paper);text-transform:uppercase;letter-spacing:.04em;}
+  .search-wrap input:focus{outline:none;background:#FFF9DB;}
+  .search-wrap::before{content:"⌕";position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:16px;font-weight:700;}
+
+  /* ===== hero ===== */
+  .hero{padding:64px 28px 36px;border-bottom:var(--border) solid var(--ink);position:relative;}
+  .hero .eyebrow{display:inline-block;font-size:12px;letter-spacing:.15em;font-weight:700;border:2px solid var(--ink);padding:4px 10px;margin-bottom:20px;}
+  .hero h1{font-size:clamp(32px,7vw,80px);max-width:1020px;}
+  .hero h1 span{color:var(--blue);}
+  .hero p.sub{max-width:600px;margin-top:22px;font-size:14.5px;color:#333;}
+  .hero .meta-row{margin-top:32px;display:flex;gap:0;flex-wrap:wrap;border-top:2px solid var(--ink);}
+  .hero .meta-row div{flex:1;min-width:135px;border-right:2px solid var(--ink);padding:13px 15px;}
+  .hero .meta-row div:last-child{border-right:none;}
+  .hero .meta-row .num{font-family:'Archivo Black',sans-serif;font-size:24px;}
+  .hero .meta-row .lbl{font-size:9.5px;letter-spacing:.1em;color:var(--gray);text-transform:uppercase;margin-top:4px;}
+
+  /* ===== marquee ===== */
+  .marquee{border-bottom:var(--border) solid var(--ink);background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap;padding:10px 0;}
+  .marquee-track{display:inline-block;animation:scroll 60s linear infinite;font-size:13px;letter-spacing:.08em;font-weight:700;}
+  .marquee-track span{padding:0 20px;}
+  .marquee-track span.hi{color:var(--yellow);}
+  @keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+  /* ===== section headers ===== */
+  .section-head{padding:40px 28px 18px;border-bottom:2px solid var(--ink);display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;}
+  .section-head h2{font-size:clamp(26px,4.6vw,44px);}
+  .section-head .tag{font-size:11px;letter-spacing:.1em;color:var(--gray);border:2px solid var(--gray);padding:4px 10px;white-space:nowrap;}
+  .section-intro{padding:16px 28px 4px;max-width:700px;font-size:13px;color:#333;}
+
+  .chip-row{display:flex;gap:8px;flex-wrap:wrap;padding:16px 28px 22px;}
+  .chip{border:2px solid var(--ink);background:#fff;padding:6px 14px;font-family:'Space Mono',monospace;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;}
+  .chip.active{background:var(--ink);color:#fff;}
+  .chip:hover{background:#f2f2f2;}
+  .chip.active:hover{background:var(--ink);}
+
+  /* ===== katalog tipe website (accordion + blueprint) ===== */
+  .katalog{display:grid;grid-template-columns:repeat(2,1fr);border-bottom:var(--border) solid var(--ink);}
+  @media(max-width:820px){.katalog{grid-template-columns:1fr;}}
+  .card{border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:24px 24px 20px;cursor:pointer;position:relative;transition:background .15s;}
+  .katalog .card:nth-child(2n){border-right:none;}
+  .card:hover{background:#FAFAF7;}
+  .card.open{background:var(--yellow);}
+  .card .top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;}
+  .card .idx{font-family:'Archivo Black',sans-serif;font-size:12px;color:var(--gray);}
+  .card.open .idx{color:var(--ink);}
+  .card h3{font-size:24px;margin-top:6px;}
+  .card .kategori{display:inline-block;margin-top:9px;font-size:9.5px;letter-spacing:.1em;font-weight:700;background:var(--ink);color:var(--paper);padding:3px 8px;}
+  .card.open .kategori{background:var(--blue);}
+  .card .def{margin-top:13px;font-size:13px;max-width:520px;color:#222;}
+  .card .toggle{font-family:'Archivo Black',sans-serif;font-size:20px;border:2px solid var(--ink);width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .card.open .toggle{background:var(--ink);color:var(--yellow);}
+  .card-detail{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .card.open .card-detail{max-height:900px;}
+  .detail-inner{margin-top:20px;padding-top:18px;border-top:2px dashed var(--ink);display:grid;grid-template-columns:1.1fr 1fr;gap:24px;}
+  @media(max-width:600px){.detail-inner{grid-template-columns:1fr;}}
+  .doc-block h4{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px;font-weight:700;}
+  .doc-block p, .doc-block ul{font-size:12.5px;color:#222;}
+  .doc-block ul{list-style:none;margin-top:2px;}
+  .doc-block li{padding:4px 0;border-bottom:1px solid rgba(0,0,0,.15);}
+  .doc-block li::before{content:"— ";}
+  .doc-block .cocok{margin-top:13px;}
+  .doc-block .cocok .pill{display:inline-block;background:var(--paper);border:2px solid var(--ink);padding:2px 8px;font-size:10.5px;margin:3px 4px 0 0;}
+
+  .frame{background:var(--ink);padding:10px;}
+  .frame .bar{display:flex;gap:5px;margin-bottom:8px;}
+  .frame .bar i{width:8px;height:8px;background:var(--paper);display:block;border-radius:50%;opacity:.7;}
+  .frame .screen{background:var(--paper);min-height:180px;display:grid;gap:4px;padding:6px;}
+  .blk{border:2px solid var(--ink);background:repeating-linear-gradient(135deg, transparent, transparent 6px, rgba(0,0,0,.05) 6px, rgba(0,0,0,.05) 7px);display:flex;align-items:flex-end;padding:4px 6px;font-size:8.5px;letter-spacing:.05em;font-weight:700;color:var(--ink);min-height:0;}
+  .blk.solid{background:var(--yellow);}
+  .blk.b{background:var(--blue);color:var(--paper);}
+  .blk.r{background:var(--red);color:var(--paper);}
+  .wf-landing{grid-template-rows:34px 70px 1fr 30px;grid-template-columns:1fr;}
+  .wf-landing .r2{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;}
+  .wf-portfolio{grid-template-rows:30px 1fr 40px;}
+  .wf-portfolio .mid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:4px;}
+  .wf-ecom{grid-template-rows:30px 1fr;grid-template-columns:70px 1fr;}
+  .wf-ecom .prod{grid-column:2;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:4px;}
+  .wf-saas{grid-template-rows:30px 1fr;grid-template-columns:60px 1fr;}
+  .wf-saas .main{grid-column:2;display:grid;grid-template-rows:30px 1fr;gap:4px;}
+  .wf-saas .chart{display:grid;grid-template-columns:2fr 1fr;gap:4px;}
+  .wf-blog{grid-template-rows:30px 1fr;grid-template-columns:1fr 70px;}
+  .wf-blog .feed{display:grid;grid-template-rows:repeat(3,1fr);gap:4px;}
+  .wf-profile{grid-template-rows:34px 60px 1fr;}
+  .wf-profile .row{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;}
+  .wf-community{grid-template-rows:30px 1fr;grid-template-columns:60px 1fr 60px;}
+  .wf-community .center{display:grid;grid-template-rows:repeat(3,1fr);gap:4px;}
+  .wf-oneapp{grid-template-rows:1fr 1fr;place-items:stretch;}
+  .frame .caption{color:var(--paper);font-size:10px;letter-spacing:.08em;margin-top:8px;display:flex;justify-content:space-between;}
+  .frame .caption span:last-child{color:var(--yellow);}
+
+  /* ===== galeri gaya desain ===== */
+  .gaya-grid{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:var(--border) solid var(--ink);}
+  @media(max-width:980px){.gaya-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:620px){.gaya-grid{grid-template-columns:1fr;}}
+  .style-card{border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);}
+  .preview{height:180px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .style-head{padding:15px 18px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;border-top:2px solid var(--ink);}
+  .style-head .idx{font-family:'Archivo Black',sans-serif;font-size:10.5px;color:var(--gray);}
+  .style-card.open .style-head{background:var(--yellow);}
+  .style-head h3{font-size:18px;margin-top:4px;}
+  .style-head .toggle{font-family:'Archivo Black',sans-serif;font-size:18px;border:2px solid var(--ink);width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .style-card.open .toggle{background:var(--ink);color:var(--yellow);}
+  .style-detail{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .style-card.open .style-detail{max-height:1000px;}
+  .style-detail-inner{padding:0 18px 20px;border-top:2px dashed var(--ink);margin-top:2px;padding-top:15px;}
+  .style-detail-inner .doc-block{margin-bottom:13px;}
+  .style-detail-inner .doc-block:last-child{margin-bottom:0;}
+  .style-detail-inner h4{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:700;}
+  .style-detail-inner li{padding:4px 0;border-bottom:1px solid rgba(0,0,0,.15);font-size:12.5px;color:#222;list-style:none;}
+  .style-detail-inner li::before{content:"— ";}
+  .style-detail-inner ul{margin-top:2px;}
+  .style-detail-inner p{font-size:12.5px;color:#222;}
+
+  .preview-brutal{background:#fff;}
+  .brutal-btn{background:var(--yellow);border:3px solid var(--ink);padding:10px 22px;font-weight:700;box-shadow:6px 6px 0 var(--ink);font-family:'Space Mono',monospace;text-transform:uppercase;font-size:12px;letter-spacing:.05em;}
+  .preview-glass{background:linear-gradient(135deg,#7F5AF0,#2CB1BC 60%,#FF8AAE);position:relative;}
+  .preview-glass::before,.preview-glass::after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.5;}
+  .preview-glass::before{width:70px;height:70px;background:#fff;top:-15px;left:-10px;}
+  .preview-glass::after{width:50px;height:50px;background:#FFE600;bottom:-10px;right:10px;}
+  .glass-card{position:relative;z-index:2;width:64%;padding:16px;background:rgba(255,255,255,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.45);border-radius:14px;color:#fff;box-shadow:0 8px 26px rgba(0,0,0,.18);font-family:'Inter',sans-serif;}
+  .glass-card b{display:block;font-size:13px;}
+  .glass-card span{font-size:10px;opacity:.85;}
+  .preview-neu{background:#E4E9F0;}
+  .neu-btn{width:96px;height:96px;border-radius:22px;background:#E4E9F0;box-shadow:8px 8px 16px #b8bec7,-8px -8px 16px #ffffff;display:flex;align-items:center;justify-content:center;color:#5b6b82;font-size:10px;font-weight:700;font-family:'Inter',sans-serif;text-align:center;}
+  .preview-min{background:#fff;}
+  .min-inner{text-align:center;font-family:'Inter',sans-serif;}
+  .min-mark{font-size:48px;font-weight:300;color:var(--ink);}
+  .min-line{width:34px;height:2px;background:var(--ink);margin:9px auto 8px;}
+  .min-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);margin:0 auto;}
+  .preview-neon{background:#0a0a12;position:relative;}
+  .preview-neon::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 18px,rgba(0,255,255,.06) 18px,rgba(0,255,255,.06) 19px);}
+  .neon-btn{position:relative;z-index:2;padding:11px 22px;border:2px solid #0ff;color:#0ff;text-transform:uppercase;font-weight:700;font-size:11px;letter-spacing:.1em;box-shadow:0 0 8px #0ff,0 0 22px rgba(0,255,255,.5);text-shadow:0 0 6px #0ff;font-family:'Space Mono',monospace;}
+  .preview-retro{background:linear-gradient(180deg,#2b0a4e 0%,#8a2ea8 45%,#ff6ec7 75%,#ffd36e 100%);position:relative;overflow:hidden;}
+  .retro-sun{position:absolute;width:64px;height:64px;border-radius:50%;background:linear-gradient(#ffe066,#ff6ec7);top:22px;left:calc(50% - 32px);box-shadow:0 0 30px rgba(255,150,220,.6);}
+  .retro-grid{position:absolute;bottom:0;left:0;right:0;height:55%;background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.5) 0 2px,transparent 2px 26px),repeating-linear-gradient(0deg,rgba(255,255,255,.35) 0 1px,transparent 1px 12px);transform:perspective(140px) rotateX(45deg);transform-origin:bottom;}
+  .retro-label{position:relative;z-index:2;font-family:'Archivo Black',sans-serif;color:#fff;font-size:18px;text-shadow:2px 2px 0 #2b0a4e;margin-top:54px;}
+  .preview-skeu{background:linear-gradient(#cfd3d8,#9aa0a6);}
+  .skeu-btn{width:116px;height:50px;border-radius:10px;background:linear-gradient(#fefefe,#d8dadd);border:1px solid #999;box-shadow:0 4px 0 #999,0 7px 10px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-weight:700;color:#333;font-size:11px;font-family:'Inter',sans-serif;}
+  .preview-clay{background:#FBEFEA;}
+  .clay-shape{width:98px;height:98px;border-radius:36px;background:linear-gradient(145deg,#FFD8CE,#FF9E80);box-shadow:8px 8px 20px rgba(255,120,80,.35),-6px -6px 16px #ffffff,inset -4px -4px 10px rgba(255,255,255,.5),inset 4px 4px 10px rgba(0,0,0,.06);}
+  .preview-material{background:#F0F1F5;}
+  .material-card{position:relative;width:66%;padding:14px;background:#fff;border-radius:8px;box-shadow:0 3px 6px rgba(0,0,0,.16),0 3px 6px rgba(0,0,0,.23);}
+  .material-card .ml{height:6px;background:#ddd;border-radius:2px;margin-bottom:6px;width:80%;}
+  .material-fab{position:absolute;width:38px;height:38px;border-radius:50%;background:#6200EE;color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;bottom:-13px;right:12px;box-shadow:0 4px 8px rgba(0,0,0,.35);}
+  .preview-flat{background:#4A90D9;}
+  .flat-icon{width:64px;height:64px;background:#FFC93C;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#2c5c8f;font-size:10px;font-weight:700;font-family:'Inter',sans-serif;}
+  .preview-max{background:#FFE45E;position:relative;overflow:hidden;}
+  .max-shape1{position:absolute;width:76px;height:76px;background:#FF3D7F;border-radius:50%;top:-18px;left:-10px;}
+  .max-shape2{position:absolute;width:56px;height:56px;background:#2B4DFF;top:26px;right:-8px;transform:rotate(20deg);}
+  .max-shape3{position:absolute;width:46px;height:46px;background:#00C2A8;bottom:-8px;left:36px;border-radius:12px;}
+  .max-label{position:relative;z-index:3;font-family:'Archivo Black',sans-serif;font-size:20px;color:#111;text-shadow:2px 2px 0 #fff;}
+  .preview-bento{background:#fff;padding:10px;}
+  .bento-grid{display:grid;grid-template-columns:1.4fr 1fr;grid-template-rows:1fr 1fr;gap:6px;width:100%;height:100%;}
+  .bento-a{grid-row:1/3;background:var(--yellow);border-radius:14px;}
+  .bento-b{background:var(--blue);border-radius:14px;}
+  .bento-c{background:var(--ink);border-radius:14px;}
+
+  /* ===== kamus komponen UI ===== */
+  .comp-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--ink);border-left:2px solid var(--ink);border-bottom:var(--border) solid var(--ink);}
+  @media(max-width:1100px){.comp-grid{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:760px){.comp-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:460px){.comp-grid{grid-template-columns:1fr;}}
+  .comp-card{border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);display:flex;flex-direction:column;}
+  .comp-illust{height:120px;border-bottom:2px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;padding:12px;overflow:hidden;}
+  .comp-body{padding:13px 15px 15px;}
+  .comp-body .idx{font-family:'Archivo Black',sans-serif;font-size:9.5px;color:var(--gray);}
+  .comp-body h4{font-size:14px;margin-top:2px;font-family:'Archivo Black',sans-serif;text-transform:uppercase;}
+  .comp-body .kategori-tag{display:inline-block;margin-top:6px;font-size:8.5px;letter-spacing:.08em;font-weight:700;border:1.5px solid var(--ink);padding:2px 6px;}
+  .comp-body .def{font-size:11px;margin-top:8px;color:#222;}
+  .comp-body .guna{font-size:10.5px;margin-top:6px;color:#555;}
+  .comp-body .guna b{color:var(--ink);}
+  .ci-line{background:#D8D8D2;height:6px;border-radius:2px;}
+  .ci-dark-line{background:var(--ink);height:6px;border-radius:2px;}
+  .ci-dot{border-radius:50%;background:var(--ink);}
+  .ci-box{border:2px solid var(--ink);background:#fff;}
+  .ci-pill{border:2px solid var(--ink);border-radius:999px;font-size:9px;font-weight:700;padding:2px 10px;display:inline-flex;align-items:center;justify-content:center;}
+
+  /* ===== dokumentasi umum (anatomy) ===== */
+  .anatomy{padding:34px 28px 56px;border-bottom:var(--border) solid var(--ink);}
+  .anatomy-diagram{border:2px solid var(--ink);display:flex;flex-direction:column;max-width:640px;margin:0 auto 28px;}
+  .anatomy-diagram .lvl{border-bottom:2px solid var(--ink);padding:13px 15px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;}
+  .anatomy-diagram .lvl:last-child{border-bottom:none;}
+  .anatomy-diagram .lvl b{font-family:'Archivo Black',sans-serif;font-size:14px;text-transform:uppercase;}
+  .anatomy-diagram .lvl span{color:var(--gray);font-size:10px;text-align:right;max-width:55%;}
+  .anatomy-diagram .lvl.hero{background:var(--yellow);}
+  .anatomy-diagram .lvl.cta{background:var(--red);color:var(--paper);}
+  .anatomy-diagram .lvl.cta span{color:var(--paper);}
+  .anatomy-notes{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:2px solid var(--ink);}
+  @media(max-width:700px){.anatomy-notes{grid-template-columns:1fr;}}
+  .anatomy-notes div{padding:17px;border-right:2px solid var(--ink);}
+  .anatomy-notes div:last-child{border-right:none;}
+  .anatomy-notes h4{font-size:11.5px;letter-spacing:.08em;margin-bottom:7px;}
+  .anatomy-notes p{font-size:12px;color:#333;}
+
+  .empty-state{padding:56px 28px;text-align:center;font-size:13px;color:var(--gray);display:none;border-bottom:var(--border) solid var(--ink);}
+  .empty-state.show{display:block;}
+
+  .tentang{padding:46px 28px;border-bottom:var(--border) solid var(--ink);max-width:700px;}
+  .tentang p{font-size:13.5px;color:#222;margin-top:13px;}
+  footer{padding:22px 28px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:10.5px;letter-spacing:.06em;color:var(--gray);text-transform:uppercase;}
+  footer b{color:var(--ink);}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<header class="nav">
+  <div class="stamp">ARSIP SITUS <span class="box">web release 1/26</span></div>
+  <div class="search-wrap"><input type="text" id="searchInput" placeholder="Cari tipe, gaya, atau komponen..."></div>
+  <nav class="links">
+    <a href="#katalog">Tipe Website</a>
+    <a href="#gaya-desain">Gaya Desain</a>
+    <a href="#komponen">Komponen UI</a>
+    <a href="#dokumentasi">Dokumentasi</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <span class="eyebrow">REFERENSI DESAIN WEB — TERBITAN 2026 — EDISI LENGKAP</span>
+  <h1>STRUKTUR, GAYA,<br>DAN <span>SETIAP</span><br>KOMPONENNYA.</h1>
+  <p class="sub">Bukan cuma tipe website dan gaya desain — arsip ini juga jadi kamus lengkap istilah komponen/elemen UI yang dipakai di hampir semua website: navbar, card, modal, tooltip, sampai skeleton loader. Semua dengan dokumentasi dan ilustrasi.</p>
+  <div class="meta-row">
+    <div><div class="num">08</div><div class="lbl">Tipe Website</div></div>
+    <div><div class="num">12</div><div class="lbl">Gaya Desain</div></div>
+    <div><div class="num">20</div><div class="lbl">Komponen UI</div></div>
+    <div><div class="num">40</div><div class="lbl">Total Spesimen</div></div>
+  </div>
+</section>
+
+<div class="marquee"><div class="marquee-track" id="marqueeTrack"></div></div>
+
+<section id="katalog">
+  <div class="section-head"><h2>Katalog Tipe Website</h2><span class="tag">Klik kartu untuk buka dokumentasi</span></div>
+  <div class="katalog" id="katalogGrid"></div>
+</section>
+
+<section id="gaya-desain">
+  <div class="section-head"><h2>Galeri Gaya Desain</h2><span class="tag">Live preview — klik untuk detail</span></div>
+  <p class="section-intro">Tipe website nentuin STRUKTURnya, gaya desain nentuin RASAnya. 12 gaya paling umum dipakai di web modern — dari yang kasar dan mentah sampai yang lembut dan playful.</p>
+  <div class="gaya-grid" id="gayaGrid"></div>
+</section>
+
+<section id="komponen">
+  <div class="section-head"><h2>Kamus Komponen UI</h2><span class="tag">20 istilah + ilustrasi + kegunaan</span></div>
+  <p class="section-intro">Ini kosakata yang dipakai desainer/developer sehari-hari. Tiap istilah langsung ditunjukin bentuknya lewat ilustrasi, jadi gak perlu nebak-nebak lagi pas baca brief atau dokumentasi desain.</p>
+  <div class="chip-row" id="chipRow">
+    <button class="chip active" data-cat="ALL">Semua</button>
+    <button class="chip" data-cat="NAVIGASI">Navigasi</button>
+    <button class="chip" data-cat="KONTEN">Konten</button>
+    <button class="chip" data-cat="INTERAKSI">Interaksi</button>
+    <button class="chip" data-cat="FEEDBACK">Feedback</button>
+  </div>
+  <div class="comp-grid" id="komponenGrid"></div>
+</section>
+
+<div class="empty-state" id="emptyState">Tidak ada spesimen yang cocok dengan pencarian/filter.</div>
+
+<section id="dokumentasi" class="anatomy">
+  <div class="section-head" style="padding-left:0;padding-right:0;"><h2>Anatomi Umum</h2><span class="tag">Struktur dasar yang muncul di hampir semua tipe</span></div>
+  <div class="anatomy-diagram" style="margin-top:28px;">
+    <div class="lvl"><b>Header</b><span>Navigasi, logo, kadang tombol aksi utama — selalu terlihat</span></div>
+    <div class="lvl hero"><b>Hero</b><span>Pernyataan utama halaman. Harus jelas dalam 3 detik pertama</span></div>
+    <div class="lvl"><b>Blok Konten</b><span>Fitur, produk, artikel, portofolio — isi sesuai tujuan tipe</span></div>
+    <div class="lvl"><b>Bukti Sosial</b><span>Testimoni, logo klien, angka — bangun kepercayaan</span></div>
+    <div class="lvl cta"><b>Ajakan Aksi</b><span>Satu aksi yang paling ingin dilakukan pengunjung</span></div>
+    <div class="lvl"><b>Footer</b><span>Kontak, tautan legal, navigasi sekunder</span></div>
+  </div>
+  <div class="anatomy-notes">
+    <div><h4>TIGA LAPIS ARSIP INI</h4><p>Tipe = struktur besar halaman. Gaya = rasa visualnya. Komponen = potongan kecil yang menyusun keduanya.</p></div>
+    <div><h4>YANG BOLEH HILANG</h4><p>Tidak semua tipe butuh semua blok/komponen. One-page app bisa lompat langsung dari header ke kontrol utama.</p></div>
+    <div><h4>YANG TIDAK BOLEH HILANG</h4><p>Header dan satu ajakan aksi yang jelas — tanpa ini, pengunjung datang tapi tidak tahu harus ngapain.</p></div>
+  </div>
+</section>
+
+<section id="tentang" class="tentang">
+  <span class="eyebrow">TENTANG ARSIP INI</span>
+  <p>Arsip Situs disusun sebagai referensi lengkap sebelum mulai membangun website apa pun — tiga lapis sekaligus: tipe website (struktur), gaya desain (rasa visual), dan komponen UI (kosakata potongan kecilnya).</p>
+  <p>Semuanya didokumentasikan dengan ilustrasi, bukan cuma teks, biar gampang langsung dikenali bentuknya. Shell halaman ini sendiri sengaja dibuat brutal — border tebal, tanpa lengkungan — sebagai identitas arsipnya.</p>
+</section>
+
+<footer>
+  <div><b>ARSIP SITUS</b> — Tipe, Gaya Desain &amp; Kamus Komponen Website</div>
+  <div>Dibangun oleh <b>CrossFlare</b> — Single-file, zero-build</div>
+</footer>
+
+<script>
+const DATA_TIPE = [
+  {idx:"01",nama:"Landing Page",kategori:"KONVERSI",def:"Satu halaman fokus buat satu tujuan: bikin pengunjung ambil satu aksi spesifik.",tujuan:"Mengubah pengunjung jadi lead, pembeli, atau pendaftar lewat satu jalur linear tanpa cabang navigasi yang membingungkan.",elemen:["Hero + headline tegas","Value proposition singkat","Bukti sosial (testimoni/logo)","Fitur atau manfaat utama","CTA yang diulang beberapa kali","Form atau tombol aksi tunggal"],cocok:["Produk baru","Kampanye iklan","Event","Pre-launch"],wf:"landing"},
+  {idx:"02",nama:"Portfolio",kategori:"PAMERAN",def:"Etalase digital buat nunjukin karya, skill, dan identitas kreator.",tujuan:"Bikin orang percaya dan akhirnya menghubungi, berdasarkan bukti kerja nyata — bukan klaim.",elemen:["Galeri karya / proyek","Studi kasus per proyek","Halaman tentang / bio","Kontak yang mudah ditemukan","Kadang resume atau CV"],cocok:["Desainer","Developer","Fotografer","Agensi kecil"],wf:"portfolio"},
+  {idx:"03",nama:"E-commerce",kategori:"TRANSAKSI",def:"Toko digital lengkap dengan katalog produk, keranjang, dan checkout.",tujuan:"Menjual barang atau jasa langsung lewat website, dari lihat produk sampai bayar.",elemen:["Katalog / grid produk","Filter dan pencarian","Halaman detail produk","Keranjang belanja","Checkout dan pembayaran","Akun pengguna"],cocok:["Retail online","Brand D2C","Marketplace kecil"],wf:"ecom"},
+  {idx:"04",nama:"SaaS / Dashboard",kategori:"PRODUK",def:"Halaman pemasaran produk software plus area aplikasi tempat pengguna login dan bekerja.",tujuan:"Konversi jadi trial atau langganan di sisi marketing, lalu retensi lewat pengalaman produk di sisi dashboard.",elemen:["Marketing page (fitur, harga, demo)","Autentikasi (login/daftar)","Dashboard atau panel data","Pengaturan akun"],cocok:["Startup software","Tools internal","Aplikasi berlangganan"],wf:"saas"},
+  {idx:"05",nama:"Blog / Media",kategori:"KONTEN",def:"Situs berbasis artikel yang terus diperbarui dan diorganisir lewat kategori atau tag.",tujuan:"Edukasi pembaca, bangun audiens, dan menang jangka panjang lewat pencarian.",elemen:["Daftar artikel terbaru","Halaman artikel penuh","Kategori dan tag","Pencarian","Formulir newsletter"],cocok:["Penulis","Media","Dokumentasi teknis"],wf:"blog"},
+  {idx:"06",nama:"Company Profile",kategori:"KEPERCAYAAN",def:"Representasi resmi sebuah bisnis atau organisasi di internet.",tujuan:"Bangun kredibilitas dan memberi info lengkap soal perusahaan ke calon klien atau mitra.",elemen:["Tentang kami","Layanan atau produk","Profil tim","Klien atau partner","Kontak dan lokasi"],cocok:["Perusahaan","Instansi","Organisasi nonprofit"],wf:"profile"},
+  {idx:"07",nama:"Community / Sosial",kategori:"INTERAKSI",def:"Platform tempat pengguna saling terhubung, posting, dan berinteraksi satu sama lain.",tujuan:"Bangun jaringan aktivitas antar pengguna — bukan cuma konten satu arah dari pemilik situs.",elemen:["Feed atau timeline","Profil pengguna","Interaksi (like/komentar/follow)","Notifikasi","Pesan langsung"],cocok:["Forum","Media sosial niche","Komunitas alumni"],wf:"community"},
+  {idx:"08",nama:"One-Page App",kategori:"UTILITAS",def:"Alat atau aplikasi ringan yang berjalan dalam satu halaman tanpa navigasi berlapis.",tujuan:"Kasih satu fungsi spesifik secepat dan sesimpel mungkin, tanpa gesekan.",elemen:["Input atau kontrol utama","Area hasil / output","State minimal","Satu aksi utama yang jelas"],cocok:["Kalkulator","Converter","Generator","Tool kecil"],wf:"oneapp"},
+];
+
+const WIREFRAMES = {
+  landing:`<div class="screen wf-landing"><div class="blk">NAV</div><div class="blk solid">HERO + CTA</div><div class="r2"><div class="blk">FITUR 1</div><div class="blk">FITUR 2</div><div class="blk">FITUR 3</div></div><div class="blk r">CTA AKHIR</div></div>`,
+  portfolio:`<div class="screen wf-portfolio"><div class="blk">NAV</div><div class="mid"><div class="blk solid">KARYA 1</div><div class="blk">KARYA 2</div><div class="blk">KARYA 3</div><div class="blk">KARYA 4</div><div class="blk">KARYA 5</div><div class="blk b">KONTAK</div></div><div class="blk">FOOTER</div></div>`,
+  ecom:`<div class="screen wf-ecom"><div class="blk" style="grid-column:1/-1;">NAV + SEARCH</div><div class="blk">FILTER</div><div class="prod"><div class="blk solid">PRODUK</div><div class="blk">PRODUK</div><div class="blk">PRODUK</div><div class="blk">PRODUK</div><div class="blk r">KERANJANG</div><div class="blk">PRODUK</div></div></div>`,
+  saas:`<div class="screen wf-saas"><div class="blk" style="grid-column:1/-1;">NAV / MARKETING</div><div class="blk">MENU</div><div class="main"><div class="blk solid">HEADER DASHBOARD</div><div class="chart"><div class="blk b">GRAFIK DATA</div><div class="blk">RINGKASAN</div></div></div></div>`,
+  blog:`<div class="screen wf-blog"><div class="blk" style="grid-column:1/-1;">NAV</div><div class="feed"><div class="blk solid">ARTIKEL UTAMA</div><div class="blk">ARTIKEL</div><div class="blk">ARTIKEL</div></div><div class="blk b">TAG / NEWSLETTER</div></div>`,
+  profile:`<div class="screen wf-profile"><div class="blk">NAV</div><div class="blk solid">TENTANG PERUSAHAAN</div><div class="row"><div class="blk">LAYANAN</div><div class="blk">LAYANAN</div><div class="blk">TIM</div><div class="blk r">KONTAK</div></div></div>`,
+  community:`<div class="screen wf-community"><div class="blk" style="grid-column:1/-1;">NAV</div><div class="blk">MENU</div><div class="center"><div class="blk solid">POSTINGAN</div><div class="blk">POSTINGAN</div><div class="blk">POSTINGAN</div></div><div class="blk b">PROFIL</div></div>`,
+  oneapp:`<div class="screen wf-oneapp"><div class="blk solid" style="align-items:center;justify-content:center;font-size:11px;">INPUT / KONTROL</div><div class="blk b" style="align-items:center;justify-content:center;font-size:11px;">HASIL / OUTPUT</div></div>`,
+};
+
+const DATA_GAYA = [
+  {idx:"01",nama:"Brutalism",id:"brutal",def:"Gaya visual yang sengaja terasa \u201Ckasar\u201D — border tebal, bayangan solid tanpa blur, warna kontras tinggi, elemen ditampilkan apa adanya tanpa polesan berlebihan.",ciri:["Border 3–6px solid, sudut siku (tanpa radius)","Drop shadow keras — offset tanpa blur","Palet warna berani: kuning/merah/biru primer","Tipografi besar, tebal, kadang monospace"],kapan:"Portofolio kreatif, produk yang ingin terlihat berani dan anti-mainstream, atau halaman yang ingin menonjol di antara kompetitor bergaya minimalis.",trik:["box-shadow offset tanpa blur (mis. 6px 6px 0)","border-radius: 0 di semua elemen","border tebal solid warna gelap"]},
+  {idx:"02",nama:"Glassmorphism",id:"glass",def:"Gaya yang meniru kaca buram — elemen transparan dengan efek blur di baliknya, memberi kesan berlapis dan ringan.",ciri:["backdrop-filter: blur() pada elemen","Latar belakang semi-transparan (rgba opacity rendah)","Border tipis putih/terang","Diletakkan di atas gradient atau ilustrasi berwarna"],kapan:"Dashboard modern, aplikasi produk digital, UI yang ingin terasa premium dan ringan tanpa terasa berat.",trik:["backdrop-filter: blur(10–16px)","background: rgba(255,255,255,.15–.25)","border: 1px solid rgba(255,255,255,.4)"]},
+  {idx:"03",nama:"Neumorphism",id:"neu",def:"Elemen UI yang terlihat timbul atau tenggelam dari permukaan berwarna monokrom, meniru bahan lunak seperti karet atau silikon.",ciri:["Warna elemen nyaris sama dengan warna latar","Dua bayangan berlawanan arah (terang & gelap)","Sudut membulat, kontras warna sangat rendah","Minim garis tepi / border eksplisit"],kapan:"Kontrol UI seperti tombol atau switch pada produk yang ingin terasa lembut dan tenang. Perlu hati-hati soal aksesibilitas kontras.",trik:["box-shadow ganda: satu terang, satu gelap, arah berlawanan","warna elemen = warna latar","border-radius besar (16–24px)"]},
+  {idx:"04",nama:"Minimalism",id:"min",def:"Pendekatan \u201Cless is more\u201D — hanya elemen yang benar-benar perlu yang ditampilkan, sisanya dibiarkan jadi ruang kosong.",ciri:["Whitespace luas di semua sisi","Palet warna terbatas: monokrom + satu aksen","Tipografi jadi elemen visual utama","Nyaris tanpa dekorasi atau bayangan"],kapan:"Brand premium, portofolio desainer, atau produk apapun yang ingin fokus penuh pada konten tanpa gangguan visual.",trik:["padding besar & konsisten di semua elemen","satu font family, variasi lewat font-weight","satu warna aksen dipakai secara konsisten"]},
+  {idx:"05",nama:"Neon / Cyberpunk",id:"neon",def:"Latar gelap dengan aksen warna neon menyala, terinspirasi estetika sci-fi dan kota di malam hari.",ciri:["Background hampir hitam","Glow lewat box-shadow / text-shadow warna cyan-magenta","Grid atau garis tipis sebagai tekstur latar","Font tegas, terasa futuristik"],kapan:"Produk gaming, platform kreator, developer tools yang ingin terasa modern, energik, dan sedikit rebel.",trik:["box-shadow warna dengan blur besar, ditumpuk 2 lapis","text-shadow untuk efek glow pada teks","border tipis warna neon di atas latar gelap"]},
+  {idx:"06",nama:"Retro / Vaporwave",id:"retro",def:"Estetika nostalgia era 80–90an — gradient matahari terbenam, grid perspektif, dan warna pastel neon.",ciri:["Gradient multi-warna: ungu → pink → oranye","Elemen matahari bergaris di horizon","Grid lantai dengan efek perspective","Tipografi tebal dengan outline/shadow kontras"],kapan:"Brand musik atau kreatif, event, produk yang ingin terasa playful dan penuh nostalgia.",trik:["linear-gradient multi-stop untuk langit","transform: perspective() untuk grid lantai","text-shadow berlapis untuk efek outline"]},
+  {idx:"07",nama:"Skeuomorphism",id:"skeu",def:"Gaya yang meniru tampilan objek fisik nyata — tombol yang terlihat bisa ditekan, tekstur seperti bahan aslinya.",ciri:["Gradient untuk simulasi arah cahaya","Bayangan berlapis: drop shadow + inset","Highlight glossy di bagian atas elemen","Detail tekstur meniru bahan fisik"],kapan:"Aplikasi yang ingin terasa akrab secara fisik — kontrol musik, kalkulator, aplikasi kamera.",trik:["box-shadow ganda: outer untuk kedalaman, inset untuk highlight","linear-gradient vertikal untuk simulasi cahaya","border tipis senada dengan bayangan"]},
+  {idx:"08",nama:"Claymorphism",id:"clay",def:"Turunan neumorphism dengan warna lebih hidup dan bentuk lebih \u201Cempuk\u201D, seperti tanah liat atau permen karet 3D.",ciri:["Sudut sangat membulat (border-radius besar)","Bayangan ganda lembut dengan warna, bukan abu-abu","Gradient halus untuk kesan volume","Palet pastel cerah dan hangat"],kapan:"Produk playful, aplikasi anak atau edukasi, brand yang ingin terasa ramah dan hangat.",trik:["border-radius sangat besar (30px+)","box-shadow ganda berwarna (bukan hitam/abu)","gradient linear lembut untuk volume"]},
+  {idx:"09",nama:"Material Design",id:"material",def:"Sistem desain Google yang meniru lapisan kertas fisik — elevasi lewat bayangan bertingkat, warna solid cerah, dan gerakan yang terasa nyata.",ciri:["Elevation shadow bertingkat sesuai \u201Cketinggian\u201D elemen","Warna primary/secondary/accent yang jelas","Ripple effect saat elemen diklik","Ikon dan tipografi konsisten di semua layar"],kapan:"Aplikasi Android atau produk yang butuh sistem desain konsisten dan sudah teruji di banyak platform.",trik:["box-shadow bertingkat sesuai level elevasi","border-radius sedang (4–8px)","transisi warna cepat & jelas saat interaksi"]},
+  {idx:"10",nama:"Flat Design",id:"flat",def:"Gaya tanpa gradient, bayangan, atau tekstur — semua elemen digambar solid dua dimensi.",ciri:["Warna blok solid tanpa gradasi","Ikon simpel dan geometris","Tanpa bayangan atau highlight sama sekali","Tipografi sans-serif yang bersih"],kapan:"Produk yang ingin terasa ringan, cepat dimuat, dan gak neko-neko secara visual.",trik:["hindari box-shadow dan gradient sepenuhnya","warna solid flat tanpa variasi shading","border-radius kecil sampai sedang"]},
+  {idx:"11",nama:"Maximalism",id:"max",def:"Kebalikan dari minimalism — banyak warna, tekstur, dan elemen visual ditumpuk sekaligus secara sengaja.",ciri:["Palet warna sangat banyak dan kontras","Layout padat, minim whitespace","Tipografi campuran beberapa gaya sekaligus","Elemen dekoratif berlapis-lapis"],kapan:"Brand fashion, musik, atau kreatif yang ingin terasa berani, ekspresif, dan mencolok.",trik:["layering banyak elemen dengan z-index","kombinasi warna komplementer/kontras tinggi","mixing beberapa font display sekaligus"]},
+  {idx:"12",nama:"Bento Grid",id:"bento",def:"Layout kotak-kotak dengan ukuran berbeda tersusun rapi seperti kotak bento — terinspirasi halaman produk gaya Apple.",ciri:["Grid dengan sel berbagai ukuran dalam satu bidang","Tiap sel jadi kartu info yang berdiri sendiri","Border-radius besar dan konsisten di semua sel","Whitespace lega di dalam tiap sel"],kapan:"Halaman fitur produk, ringkasan dashboard, atau portofolio yang ingin nampilin banyak info sekaligus secara terstruktur.",trik:["CSS grid dengan grid-template-areas custom","border-radius seragam di semua sel","gap konsisten antar sel"]},
+];
+
+const STYLE_PREVIEWS = {
+  brutal:`<div class="brutal-btn">Klik Aja</div>`,
+  glass:`<div class="glass-card"><b>Frosted Card</b><span>backdrop-filter: blur()</span></div>`,
+  neu:`<div class="neu-btn">SOFT<br>UI</div>`,
+  min:`<div class="min-inner"><div class="min-mark">Aa</div><div class="min-line"></div><div class="min-dot"></div></div>`,
+  neon:`<div class="neon-btn">Masuk</div>`,
+  retro:`<div class="retro-sun"></div><div class="retro-grid"></div><div class="retro-label">VAPOR</div>`,
+  skeu:`<div class="skeu-btn">PLAY ▶</div>`,
+  clay:`<div class="clay-shape"></div>`,
+  material:`<div class="material-card"><div class="ml" style="width:90%;"></div><div class="ml" style="width:70%;"></div><div class="ml" style="width:50%;"></div><div class="material-fab">+</div></div>`,
+  flat:`<div class="flat-icon">IKON</div>`,
+  max:`<div class="max-shape1"></div><div class="max-shape2"></div><div class="max-shape3"></div><div class="max-label">WOW!</div>`,
+  bento:`<div class="bento-grid"><div class="bento-a"></div><div class="bento-b"></div><div class="bento-c"></div></div>`,
+};
+
+const DATA_KOMPONEN = [
+  {idx:"01",nama:"Navbar",kategori:"NAVIGASI",def:"Bilah navigasi horizontal di bagian atas halaman berisi logo dan tautan menu utama.",guna:"Bantu pengguna berpindah antar halaman/section tanpa harus scroll cari-cari.",ill:"navbar"},
+  {idx:"02",nama:"Sidebar",kategori:"NAVIGASI",def:"Panel navigasi vertikal di sisi layar, biasa dipakai di dashboard atau aplikasi dengan banyak menu.",guna:"Menampung banyak item navigasi tanpa memenuhi bagian atas halaman.",ill:"sidebar"},
+  {idx:"03",nama:"Breadcrumb",kategori:"NAVIGASI",def:"Jejak teks bertingkat (mis. Beranda > Produk > Detail) yang nunjukin posisi pengguna dalam struktur situs.",guna:"Bantu pengguna paham \u201Csedang di mana\u201D dan gampang balik ke level atas.",ill:"breadcrumb"},
+  {idx:"04",nama:"Pagination",kategori:"NAVIGASI",def:"Kontrol nomor halaman untuk membagi daftar panjang jadi beberapa halaman.",guna:"Mempercepat loading dan bikin daftar besar lebih gampang dijelajah.",ill:"pagination"},
+  {idx:"05",nama:"Hamburger Menu",kategori:"NAVIGASI",def:"Ikon tiga garis yang menyembunyikan menu navigasi di balik satu tombol, umum di tampilan mobile.",guna:"Menghemat ruang layar sempit tanpa menghilangkan akses ke menu.",ill:"hamburger"},
+  {idx:"06",nama:"Hero Section",kategori:"KONTEN",def:"Blok pertama yang dilihat pengunjung, biasanya berisi headline besar, subteks, dan CTA.",guna:"Menyampaikan pesan utama halaman dalam hitungan detik pertama.",ill:"hero"},
+  {idx:"07",nama:"Card",kategori:"KONTEN",def:"Kontainer kecil mandiri yang membungkus satu unit informasi — gambar, judul, deskripsi singkat.",guna:"Menyusun konten sejenis (produk, artikel, profil) dalam grid yang rapi dan gampang dipindai.",ill:"card"},
+  {idx:"08",nama:"Footer",kategori:"KONTEN",def:"Bagian paling bawah halaman berisi tautan sekunder, info kontak, dan hak cipta.",guna:"Jadi \u201Cjaring pengaman\u201D navigasi dan info legal yang gak perlu selalu terlihat.",ill:"footer"},
+  {idx:"09",nama:"Avatar",kategori:"KONTEN",def:"Representasi visual pengguna, biasa berbentuk lingkaran berisi foto atau inisial.",guna:"Personalisasi cepat — pengguna langsung kenali ini punya siapa.",ill:"avatar"},
+  {idx:"10",nama:"Button",kategori:"INTERAKSI",def:"Elemen yang bisa diklik untuk memicu satu aksi spesifik.",guna:"Elemen paling penting buat ajakan bertindak — harus paling gampang dikenali sebagai bisa diklik.",ill:"button"},
+  {idx:"11",nama:"Dropdown",kategori:"INTERAKSI",def:"Menu yang muncul ke bawah saat elemen pemicu (tombol/select) diklik, berisi daftar pilihan.",guna:"Menghemat ruang dengan menyembunyikan pilihan sampai dibutuhkan.",ill:"dropdown"},
+  {idx:"12",nama:"Accordion",kategori:"INTERAKSI",def:"Daftar item yang bisa dibuka-tutup satu per satu untuk menampilkan/menyembunyikan konten.",guna:"Menyusun banyak info (FAQ, dokumentasi) tanpa bikin halaman kepanjangan.",ill:"accordion"},
+  {idx:"13",nama:"Tabs",kategori:"INTERAKSI",def:"Kumpulan label sejajar yang tiap kliknya menukar konten di area yang sama.",guna:"Membandingkan atau mengelompokkan konten terkait tanpa pindah halaman.",ill:"tabs"},
+  {idx:"14",nama:"Carousel / Slider",kategori:"INTERAKSI",def:"Area konten yang bergeser otomatis atau manual antar beberapa slide.",guna:"Menampilkan beberapa highlight bergantian dalam satu ruang terbatas.",ill:"carousel"},
+  {idx:"15",nama:"Modal / Dialog",kategori:"FEEDBACK",def:"Jendela yang muncul di atas konten utama dan memblokir interaksi lain sampai ditutup.",guna:"Meminta perhatian penuh pengguna untuk satu tugas — konfirmasi, form singkat.",ill:"modal"},
+  {idx:"16",nama:"Tooltip",kategori:"FEEDBACK",def:"Label kecil yang muncul saat kursor/hover di atas elemen, berisi penjelasan singkat.",guna:"Kasih konteks tambahan tanpa memenuhi tampilan utama dengan teks.",ill:"tooltip"},
+  {idx:"17",nama:"Toast / Snackbar",kategori:"FEEDBACK",def:"Notifikasi kecil yang muncul sebentar di pojok/bawah layar lalu hilang sendiri.",guna:"Kasih tahu hasil satu aksi — berhasil/gagal — tanpa mengganggu alur kerja pengguna.",ill:"toast"},
+  {idx:"18",nama:"Badge / Chip",kategori:"FEEDBACK",def:"Label kecil berbentuk pil, biasa buat status, kategori, atau angka notifikasi.",guna:"Kasih info ringkas sekilas mata tanpa butuh ruang besar.",ill:"badge"},
+  {idx:"19",nama:"Progress Bar",kategori:"FEEDBACK",def:"Bar yang terisi bertahap buat nunjukin kemajuan sebuah proses.",guna:"Kasih tahu pengguna berapa lama lagi harus nunggu atau seberapa jauh sudah maju.",ill:"progress"},
+  {idx:"20",nama:"Skeleton Loader",kategori:"FEEDBACK",def:"Placeholder abu-abu berbentuk blok konten yang tampil saat data masih dimuat.",guna:"Bikin loading terasa lebih cepat karena struktur halaman udah kelihatan dari awal.",ill:"skeleton"},
+];
+
+const COMP_ILLUST = {
+  navbar:`<div style="width:100%;display:flex;align-items:center;justify-content:space-between;border:2px solid var(--ink);padding:8px 10px;"><div class="ci-dot" style="width:12px;height:12px;"></div><div style="display:flex;gap:6px;"><div class="ci-line" style="width:18px;"></div><div class="ci-line" style="width:18px;"></div><div class="ci-line" style="width:18px;"></div></div><div class="ci-pill" style="background:var(--yellow);">CTA</div></div>`,
+  sidebar:`<div style="display:flex;gap:6px;width:100%;height:100%;"><div style="width:32px;border:2px solid var(--ink);display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0;"><div class="ci-dot" style="width:8px;height:8px;background:var(--yellow);"></div><div class="ci-dot" style="width:8px;height:8px;"></div><div class="ci-dot" style="width:8px;height:8px;"></div></div><div style="flex:1;border:2px solid var(--ink);"></div></div>`,
+  breadcrumb:`<div style="display:flex;align-items:center;gap:6px;font-size:9.5px;font-weight:700;flex-wrap:wrap;justify-content:center;"><span>BERANDA</span><span style="color:var(--gray);">/</span><span>PRODUK</span><span style="color:var(--gray);">/</span><span style="color:var(--blue);">DETAIL</span></div>`,
+  pagination:`<div style="display:flex;gap:5px;"><div class="ci-pill">‹</div><div class="ci-pill" style="background:var(--ink);color:#fff;">1</div><div class="ci-pill">2</div><div class="ci-pill">3</div><div class="ci-pill">›</div></div>`,
+  hamburger:`<div style="display:flex;flex-direction:column;gap:5px;width:34px;"><div class="ci-dark-line"></div><div class="ci-dark-line"></div><div class="ci-dark-line"></div></div>`,
+  hero:`<div style="width:100%;text-align:center;"><div class="ci-dark-line" style="width:70%;height:10px;margin:0 auto 8px;"></div><div class="ci-line" style="width:50%;height:6px;margin:0 auto 14px;"></div><div class="ci-pill" style="background:var(--yellow);margin:0 auto;width:fit-content;">MULAI →</div></div>`,
+  card:`<div style="width:120px;border:2px solid var(--ink);"><div style="height:46px;background:repeating-linear-gradient(135deg,transparent,transparent 6px,rgba(0,0,0,.08) 6px,rgba(0,0,0,.08) 7px);border-bottom:2px solid var(--ink);"></div><div style="padding:8px;"><div class="ci-dark-line" style="width:70%;margin-bottom:6px;"></div><div class="ci-line" style="width:90%;"></div></div></div>`,
+  footer:`<div style="width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">${[1,2,3].map(()=>`<div style="display:flex;flex-direction:column;gap:5px;"><div class="ci-dark-line" style="width:60%;"></div><div class="ci-line"></div><div class="ci-line"></div></div>`).join('')}</div>`,
+  avatar:`<div style="display:flex;gap:10px;align-items:center;"><div style="width:42px;height:42px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-size:13px;">CF</div><div><div class="ci-dark-line" style="width:56px;margin-bottom:6px;"></div><div class="ci-line" style="width:36px;"></div></div></div>`,
+  button:`<div style="background:var(--ink);color:#fff;padding:10px 20px;font-weight:700;font-size:11px;border-radius:6px;">TOMBOL AKSI</div>`,
+  dropdown:`<div style="width:80%;"><div style="border:2px solid var(--ink);padding:7px 12px;display:flex;justify-content:space-between;gap:20px;font-size:10px;font-weight:700;">PILIH <span>▾</span></div><div style="border:2px solid var(--ink);border-top:none;"><div style="padding:6px 12px;font-size:9.5px;border-bottom:1px solid #ddd;">Opsi 1</div><div style="padding:6px 12px;font-size:9.5px;background:var(--yellow);">Opsi 2</div></div></div>`,
+  accordion:`<div style="width:90%;"><div style="border:2px solid var(--ink);padding:7px 10px;display:flex;justify-content:space-between;font-size:9.5px;font-weight:700;">PERTANYAAN 1 <span>+</span></div><div style="border:2px solid var(--ink);border-top:none;padding:7px 10px;display:flex;justify-content:space-between;font-size:9.5px;font-weight:700;background:var(--yellow);">PERTANYAAN 2 <span>−</span></div><div style="border:2px solid var(--ink);border-top:none;padding:8px 10px;font-size:8.5px;color:#555;">Jawaban muncul di sini...</div></div>`,
+  tabs:`<div style="width:90%;"><div style="display:flex;border-bottom:2px solid var(--ink);"><div style="padding:7px 10px;font-size:9.5px;font-weight:700;border-bottom:3px solid var(--ink);">TAB A</div><div style="padding:7px 10px;font-size:9.5px;color:var(--gray);">TAB B</div><div style="padding:7px 10px;font-size:9.5px;color:var(--gray);">TAB C</div></div><div style="padding:8px 2px;font-size:8.5px;color:#555;">Konten tab aktif...</div></div>`,
+  carousel:`<div style="width:90%;"><div style="border:2px solid var(--ink);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 6px;font-weight:700;"><span>‹</span><div style="width:60%;height:40px;background:repeating-linear-gradient(135deg,transparent,transparent 6px,rgba(0,0,0,.08) 6px,rgba(0,0,0,.08) 7px);"></div><span>›</span></div><div style="display:flex;gap:5px;justify-content:center;margin-top:8px;"><div class="ci-dot" style="width:6px;height:6px;background:var(--ink);"></div><div class="ci-dot" style="width:6px;height:6px;background:#ccc;"></div><div class="ci-dot" style="width:6px;height:6px;background:#ccc;"></div></div></div>`,
+  modal:`<div style="position:relative;width:100%;height:100%;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;"><div style="background:#fff;border:2px solid var(--ink);width:74%;padding:12px;"><div class="ci-dark-line" style="width:60%;margin-bottom:7px;"></div><div class="ci-line" style="width:90%;margin-bottom:4px;"></div><div class="ci-line" style="width:70%;margin-bottom:9px;"></div><div style="background:var(--ink);color:#fff;font-size:8.5px;padding:4px 9px;display:inline-block;">OK</div></div></div>`,
+  tooltip:`<div style="position:relative;"><div style="border:2px solid var(--ink);padding:7px 14px;font-size:9.5px;font-weight:700;">HOVER SAYA</div><div style="position:absolute;top:-32px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:8.5px;padding:4px 8px;white-space:nowrap;">Ini tooltip</div></div>`,
+  toast:`<div style="position:relative;width:100%;height:100%;"><div style="position:absolute;bottom:0;right:0;background:var(--ink);color:#fff;padding:8px 12px;font-size:9.5px;font-weight:700;display:flex;align-items:center;gap:7px;white-space:nowrap;"><span style="color:var(--yellow);">✓</span> Berhasil disimpan</div></div>`,
+  badge:`<div style="display:flex;gap:12px;align-items:center;"><div style="position:relative;"><div class="ci-box" style="width:32px;height:32px;"></div><div style="position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;font-size:8px;font-weight:700;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;">3</div></div><div class="ci-pill" style="background:var(--blue);color:#fff;">BARU</div></div>`,
+  progress:`<div style="width:78%;"><div style="border:2px solid var(--ink);height:14px;"><div style="width:64%;height:100%;background:var(--yellow);"></div></div><div style="font-size:9px;margin-top:6px;font-weight:700;">64%</div></div>`,
+  skeleton:`<div style="width:90%;display:flex;gap:10px;"><div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(90deg,#eee,#f7f7f7,#eee);flex-shrink:0;"></div><div style="flex:1;display:flex;flex-direction:column;gap:6px;justify-content:center;"><div style="height:8px;width:70%;background:linear-gradient(90deg,#eee,#f7f7f7,#eee);"></div><div style="height:8px;width:50%;background:linear-gradient(90deg,#eee,#f7f7f7,#eee);"></div></div></div>`,
+};
+
+function renderTipe(){
+  const grid = document.getElementById('katalogGrid');
+  DATA_TIPE.forEach(item=>{
+    const card = document.createElement('div');
+    card.className='card';
+    card.dataset.search = (item.nama+" "+item.kategori+" "+item.def).toLowerCase();
+    card.innerHTML = `
+      <div class="top-row">
+        <div><div class="idx">SPESIMEN ${item.idx}</div><h3>${item.nama}</h3><span class="kategori">${item.kategori}</span></div>
+        <div class="toggle">+</div>
+      </div>
+      <p class="def">${item.def}</p>
+      <div class="card-detail"><div class="detail-inner">
+        <div class="doc-block">
+          <h4>Tujuan</h4><p>${item.tujuan}</p>
+          <h4 style="margin-top:15px;">Elemen Wajib</h4><ul>${item.elemen.map(e=>`<li>${e}</li>`).join('')}</ul>
+          <div class="cocok"><h4>Cocok Untuk</h4>${item.cocok.map(c=>`<span class="pill">${c}</span>`).join('')}</div>
+        </div>
+        <div class="frame"><div class="bar"><i></i><i></i><i></i></div>${WIREFRAMES[item.wf]}<div class="caption"><span>BLUEPRINT</span><span>SPESIMEN ${item.idx}</span></div></div>
+      </div></div>`;
+    card.addEventListener('click', ()=>{
+      const wasOpen = card.classList.contains('open');
+      grid.querySelectorAll('.card.open').forEach(c=>{c.classList.remove('open');c.querySelector('.toggle').textContent='+';});
+      if(!wasOpen){card.classList.add('open');card.querySelector('.toggle').textContent='×';}
+    });
+    grid.appendChild(card);
+  });
+}
+
+function renderGaya(){
+  const grid = document.getElementById('gayaGrid');
+  DATA_GAYA.forEach(item=>{
+    const card = document.createElement('div');
+    card.className='style-card';
+    card.dataset.search = (item.nama+" "+item.def).toLowerCase();
+    card.innerHTML = `
+      <div class="preview preview-${item.id}">${STYLE_PREVIEWS[item.id]}</div>
+      <div class="style-head"><div><div class="idx">GAYA ${item.idx}</div><h3>${item.nama}</h3></div><div class="toggle">+</div></div>
+      <div class="style-detail"><div class="style-detail-inner">
+        <div class="doc-block"><h4>Definisi</h4><p>${item.def}</p></div>
+        <div class="doc-block"><h4>Ciri Khas</h4><ul>${item.ciri.map(c=>`<li>${c}</li>`).join('')}</ul></div>
+        <div class="doc-block"><h4>Kapan Cocok Dipakai</h4><p>${item.kapan}</p></div>
+        <div class="doc-block"><h4>Trik CSS Utama</h4><ul>${item.trik.map(t=>`<li>${t}</li>`).join('')}</ul></div>
+      </div></div>`;
+    const toggleFn = ()=>{
+      const wasOpen = card.classList.contains('open');
+      grid.querySelectorAll('.style-card.open').forEach(c=>{c.classList.remove('open');c.querySelector('.toggle').textContent='+';});
+      if(!wasOpen){card.classList.add('open');card.querySelector('.toggle').textContent='×';}
+    };
+    card.querySelector('.preview').addEventListener('click', toggleFn);
+    card.querySelector('.style-head').addEventListener('click', toggleFn);
+    grid.appendChild(card);
+  });
+}
+
+function renderKomponen(){
+  const grid = document.getElementById('komponenGrid');
+  DATA_KOMPONEN.forEach(item=>{
+    const card = document.createElement('div');
+    card.className='comp-card';
+    card.dataset.category = item.kategori;
+    card.dataset.search = (item.nama+" "+item.kategori+" "+item.def).toLowerCase();
+    card.innerHTML = `
+      <div class="comp-illust">${COMP_ILLUST[item.ill]}</div>
+      <div class="comp-body">
+        <div class="idx">${item.idx}</div>
+        <h4>${item.nama}</h4>
+        <span class="kategori-tag">${item.kategori}</span>
+        <p class="def">${item.def}</p>
+        <p class="guna"><b>Kegunaan:</b> ${item.guna}</p>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+renderTipe();
+renderGaya();
+renderKomponen();
+
+// marquee — gabungan semua nama
+const names = [...DATA_TIPE.map(d=>d.nama.toUpperCase()), ...DATA_GAYA.map(d=>d.nama.toUpperCase()), ...DATA_KOMPONEN.map(d=>d.nama.toUpperCase())];
+const loopContent = [...names, ...names].map((n,i)=>`<span class="${i%5===0?'hi':''}">${n} ///</span>`).join('');
+document.getElementById('marqueeTrack').innerHTML = loopContent;
+
+// filter: search + kategori (khusus komponen)
+let activeCategory = 'ALL';
+const searchInput = document.getElementById('searchInput');
+const emptyState = document.getElementById('emptyState');
+
+function applyFilters(){
+  const q = searchInput.value.trim().toLowerCase();
+  let visible = 0;
+  document.querySelectorAll('#katalogGrid .card, #gayaGrid .style-card').forEach(card=>{
+    const match = !q || card.dataset.search.includes(q);
+    card.style.display = match ? '' : 'none';
+    if(match) visible++;
+  });
+  document.querySelectorAll('#komponenGrid .comp-card').forEach(card=>{
+    const matchQ = !q || card.dataset.search.includes(q);
+    const matchCat = activeCategory==='ALL' || card.dataset.category===activeCategory;
+    const show = matchQ && matchCat;
+    card.style.display = show ? '' : 'none';
+    if(show) visible++;
+  });
+  emptyState.classList.toggle('show', visible===0);
+}
+searchInput.addEventListener('input', applyFilters);
+
+document.querySelectorAll('.chip').forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    activeCategory = chip.dataset.cat;
+    applyFilters();
+  });
+});
+</script>
+</body>
+</html>
